@@ -96,7 +96,7 @@ def retry_client_access_regional_secret_version(
 def secret_id(
     regional_client: secretmanager.SecretManagerServiceClient,
     project_id: str,
-    location_id: str
+    location_id: str,
 ) -> Iterator[str]:
     secret_id = f"python-secret-{uuid.uuid4()}"
 
@@ -105,7 +105,9 @@ def secret_id(
     print(f"deleting secret {secret_id}")
     try:
         time.sleep(5)
-        retry_client_delete_regional_secret(regional_client, request={"name": secret_path})
+        retry_client_delete_regional_secret(
+            regional_client, request={"name": secret_path}
+        )
     except exceptions.NotFound:
         # Secret was already deleted, probably in the test
         print(f"Secret {secret_id} was not found.")
